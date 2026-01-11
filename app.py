@@ -29,7 +29,7 @@ def detail():
                 return render_template('error.html',
                                      error_title="Incomplete Data",
                                      error_message="Anime details are incomplete. Please try another anime."), 500
-            return render_template('detail.html', data=data)
+            return render_template('detail.html', data=data, url=url)
         else:
             return render_template('error.html',
                                  error_title="Failed to Load",
