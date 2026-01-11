@@ -1,1 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NekoStream - Your Ultimate Anime Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-cat"></i>
+                <span>NekoStream</span>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-tab="latest">
+                <i class="fas fa-fire"></i>
+                <span>Latest Updates</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="release">
+                <i class="fas fa-calendar-alt"></i>
+                <span>All Releases</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="search">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="categories">
+                <i class="fas fa-th-large"></i>
+                <span>Categories</span>
+            </a>
+            <a href="#" class="nav-item" data-tab="random">
+                <i class="fas fa-random"></i>
+                <span>Random Anime</span>
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+            </div>
+            <p class="copyright">© 2024 NekoStream</p>
+        </div>
+    </aside>
 
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <a href="/" class="header-logo">
+                <i class="fas fa-cat"></i>
+                <span>NekoStream</span>
+            </a>
+            
+            <div class="header-actions">
+                <button class="icon-btn" id="randomBtn" title="Random Anime">
+                    <i class="fas fa-random"></i>
+                </button>
+                <button class="icon-btn" id="refreshBtn" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to NekoStream</h1>
+                <p class="hero-subtitle">Discover and watch the latest anime episodes in high quality</p>
+            </div>
+            <div class="hero-gradient"></div>
+        </section>
+
+        <!-- Search Section -->
+        <section class="search-section" id="searchSection" style="display: none;">
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search for anime titles...">
+                    <button class="search-submit" onclick="performSearch()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="searchResults"></div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="categories-section" id="categoriesSection" style="display: none;">
+            <h2 class="section-title">Browse by Genre</h2>
+            <div class="category-grid" id="categoriesGrid">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading categories...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <section class="content-section" id="contentSection">
+            <div class="section-header">
+                <h2 class="section-title" id="sectionTitle">Latest Updates</h2>
+            </div>
+            
+            <div id="content">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading anime...</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="page-btn" id="prevBtn" onclick="changePage(-1)">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span class="page-info" id="pageInfo">Page 1</span>
+                <button class="page-btn" id="nextBtn" onclick="changePage(1)">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
