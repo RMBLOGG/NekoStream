@@ -29,6 +29,11 @@
                 <i class="fas fa-calendar-alt"></i>
                 <span>All Releases</span>
             </a>
+            <a href="#" class="nav-item" data-tab="bookmarks">
+                <i class="fas fa-bookmark"></i>
+                <span>My Bookmarks</span>
+                <span class="bookmark-count" id="bookmarkCount">0</span>
+            </a>
             <a href="#" class="nav-item" data-tab="search">
                 <i class="fas fa-search"></i>
                 <span>Search</span>
@@ -67,6 +72,10 @@
             </a>
             
             <div class="header-actions">
+                <button class="icon-btn" id="bookmarksBtn" title="My Bookmarks">
+                    <i class="fas fa-bookmark"></i>
+                    <span class="bookmark-badge" id="bookmarkBadge">0</span>
+                </button>
                 <button class="icon-btn" id="randomBtn" title="Random Anime">
                     <i class="fas fa-random"></i>
                 </button>
@@ -83,6 +92,25 @@
                 <p class="hero-subtitle">Discover and watch the latest anime episodes in high quality</p>
             </div>
             <div class="hero-gradient"></div>
+        </section>
+
+        <!-- Bookmarks Section -->
+        <section class="bookmarks-section" id="bookmarksSection" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-bookmark"></i> My Bookmarks
+                </h2>
+                <button class="clear-bookmarks-btn" id="clearBookmarksBtn" style="display: none;">
+                    <i class="fas fa-trash-alt"></i> Clear All
+                </button>
+            </div>
+            <div id="bookmarksContent">
+                <div class="empty-bookmarks">
+                    <i class="fas fa-bookmark" style="font-size: 4rem; opacity: 0.3; margin-bottom: 1rem;"></i>
+                    <p>You haven't bookmarked any anime yet</p>
+                    <p style="font-size: 0.9rem; opacity: 0.7;">Start exploring and save your favorites!</p>
+                </div>
+            </div>
         </section>
 
         <!-- Search Section -->
@@ -137,5 +165,6 @@
     </main>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bookmarks.js') }}"></script>
 </body>
 </html>
