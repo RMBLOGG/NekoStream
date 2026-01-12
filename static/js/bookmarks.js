@@ -1,5 +1,5 @@
-// Bookmark management - TIDAK MENGUBAH FUNGSI LAIN
-// File ini hanya menambahkan fitur bookmark tanpa memodifikasi fungsi existing
+// Bookmark management - FIXED VERSION
+// File ini sudah diperbaiki agar bookmark cards bisa diklik ke detail page
 
 (function() {
     'use strict';
@@ -120,9 +120,6 @@
                 }
             }
             
-            // Debug: log image URL
-            console.log('Bookmark:', anime.title, '| Image URL:', imgUrl);
-            
             // Handle genre - bisa string atau array atau undefined
             let genres = '';
             if (anime.genre) {
@@ -137,23 +134,24 @@
                 ).join('');
             }
             
+            // FIXED: Tambahkan data-url attribute untuk memudahkan click handling
             html += `
-                <div class="anime-card">
+                <div class="anime-card bookmark-card" data-url="${escapeHtml(anime.url)}">
                     <div class="anime-poster">
                         <img src="${imgUrl}" alt="${escapeHtml(anime.title)}" 
                              onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'"
                              loading="lazy">
                         <div class="anime-overlay">
-                            <a href="/detail?url=${encodeURIComponent(anime.url)}" class="play-btn">
+                            <div class="play-btn">
                                 <i class="fas fa-play"></i>
-                            </a>
+                            </div>
                         </div>
                     </div>
                     <div class="anime-info">
                         <h3 class="anime-title" title="${escapeHtml(anime.title)}">${escapeHtml(anime.title)}</h3>
                         ${anime.info ? `<p class="anime-meta">${escapeHtml(anime.info)}</p>` : ''}
                         ${genres ? `<div class="anime-genres">${genres}</div>` : ''}
-                        <button class="remove-bookmark-btn" onclick="removeBookmarkItem('${escapeHtml(anime.url)}')">
+                        <button class="remove-bookmark-btn" onclick="event.stopPropagation(); removeBookmarkItem('${escapeHtml(anime.url).replace(/'/g, "\\'")}')">
                             <i class="fas fa-trash-alt"></i> Remove
                         </button>
                     </div>
@@ -163,6 +161,36 @@
         
         html += '</div>';
         content.innerHTML = html;
+        
+        // FIXED: Add click event listener to bookmark cards
+        setupBookmarkCardClickHandlers();
+    }
+
+    // FIXED: Setup click handlers for bookmark cards
+    function setupBookmarkCardClickHandlers() {
+        const bookmarkCards = document.querySelectorAll('.bookmark-card');
+        
+        bookmarkCards.forEach(card => {
+            // Remove any existing listeners by cloning
+            const newCard = card.cloneNode(true);
+            card.parentNode.replaceChild(newCard, card);
+            
+            // Add new click listener
+            newCard.addEventListener('click', function(e) {
+                // Don't navigate if clicking on remove button
+                if (e.target.closest('.remove-bookmark-btn')) {
+                    return;
+                }
+                
+                const url = this.getAttribute('data-url');
+                if (url) {
+                    window.location.href = `/detail?url=${encodeURIComponent(url)}`;
+                }
+            });
+            
+            // Make card look clickable
+            newCard.style.cursor = 'pointer';
+        });
     }
 
     // Clear all bookmarks
@@ -330,12 +358,14 @@
                 gap: 1.5rem;
             }
 
+            /* FIXED: Make bookmark cards clickable */
             .bookmarks-section .anime-card {
                 background: var(--card-bg, #1e293b);
                 border-radius: 0.75rem;
                 overflow: hidden;
                 transition: transform 0.3s ease, box-shadow 0.3s ease;
                 cursor: pointer;
+                position: relative;
             }
 
             .bookmarks-section .anime-card:hover {
@@ -361,25 +391,6 @@
                 display: block;
             }
 
-            .bookmarks-section .anime-image {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-
-            .bookmarks-section .image-placeholder {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 3rem;
-                background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            }
-
             .bookmarks-section .anime-overlay {
                 position: absolute;
                 top: 0;
@@ -392,6 +403,7 @@
                 justify-content: center;
                 opacity: 0;
                 transition: opacity 0.3s ease;
+                pointer-events: none; /* FIXED: Allow clicks to pass through */
             }
 
             .bookmarks-section .anime-card:hover .anime-overlay {
@@ -409,10 +421,10 @@
                 justify-content: center;
                 font-size: 1.5rem;
                 transition: transform 0.3s ease;
-                text-decoration: none;
+                pointer-events: none; /* FIXED: Button is just visual, card handles click */
             }
 
-            .bookmarks-section .play-btn:hover {
+            .bookmarks-section .anime-card:hover .play-btn {
                 transform: scale(1.1);
             }
 
@@ -481,6 +493,7 @@
                 color: var(--text-secondary);
             }
 
+            /* FIXED: Remove button needs higher z-index to be clickable */
             .remove-bookmark-btn {
                 width: 100%;
                 margin-top: 0.5rem;
@@ -496,6 +509,8 @@
                 gap: 0.5rem;
                 transition: all 0.3s ease;
                 font-size: 0.85rem;
+                position: relative;
+                z-index: 10; /* FIXED: Ensure button is clickable */
             }
 
             .remove-bookmark-btn:hover {
@@ -522,7 +537,7 @@
                     align-items: flex-start;
                 }
                 .bookmarks-section .anime-grid {
-                    grid-template-columns: repeat(2, 1fr); /* 2 kolom di mobile */
+                    grid-template-columns: repeat(2, 1fr);
                     gap: 1rem;
                 }
                 .bookmarks-section .anime-title {
@@ -533,7 +548,7 @@
                     padding: 0.75rem;
                 }
                 .bookmarks-section .anime-genres {
-                    display: none; /* Hide genres di mobile untuk save space */
+                    display: none;
                 }
                 .remove-bookmark-btn {
                     font-size: 0.75rem;
